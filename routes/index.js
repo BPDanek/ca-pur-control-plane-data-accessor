@@ -13,36 +13,46 @@ router.get('/', function(req, res, next) {
 });
 
 /*
- * format of query is ?counties=["count1_id","count2_id", "count3_id",...]
+ * format of query is ?counties=["count1_id","count2_id", "count3_id",...] where countyX_id is the id for a CA county
+ * responds with ["county1_count", "county2_count", "county3_count", ...] where countyX_count is the number of used pesticides for a county
  */
 router.get('/query-pur-db', function(req, res, next) {
 
+    // part of route
     var counties = req.query.counties
 
     // in the future do more stringent cleaning
-    console.log("before split", counties)
-    counties = counties.replace('[', '').replace(']', '')
-    console.log(counties)
-    counties = counties.split(',', 58)
-    console.log("after split", counties[0])
+    counties = counties.replace('[', '').replace(']', '').split(',', )
 
-    if (count.length > 58) {
+    if (counties.length > 58) {
         console.log("invalid query")
-        res.respond("Invalid query parameters. ")
+        res.send("Invalid query parameters. ")
+        return
     }
 
-    // query db
-    // use pgPromise for async db access. http://vitaly-t.github.io/pg-promise/Database.html#one
-    var query = 'SELECT COUNT(*) FROM ca_udc;'
-    db.one(query)
-      .then(function (data) {
-        console.log('DATA:', data)
-      })
-      .catch(function (error) {
-        console.log('ERROR:', error)
-      })
+    var pesticide_count_promises = []
 
-    res.render('index', { title: 'Express' });
+    // query db using pgPromise for async db access. http://vitaly-t.github.io/pg-promise/Database.html#one
+    for (var row_index = 0; row_index < counties.length; row_index++) {
+
+        // build query for rout parameters
+        const query = `SELECT COUNT(*) FROM ca_udc WHERE county_cd = '${counties[row_index]}';`
+
+        // unpack count and push to an array of async requests/Promises
+        pesticide_count_promises.push(
+            db.one(query)
+                .then((data) => { return data.count })
+                .catch(() => { return 0 })
+        )
+    }
+
+    // when all requests resolve then
+    Promise.all(pesticide_count_promises)
+        .then((count) => {
+            console.log("Counts:", count)
+            res.status(200).send(count) // return to sender
+        })
+        .catch((error) => {console.log('Query Promise Errors:', error)})
 })
 
 module.exports = router;
