@@ -3,20 +3,22 @@ var express = require('express');
 var router = express.Router();
 var pgp = require('pg-promise')(/* options */)
 var db = pgp(db_config)
-var url = require('url');
-
-
+const cors = require("cors");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
+    res.render('index', { title: 'Anto' });
 });
+
+router.get('/test', function(req, res) {
+    res.send("Welcome to ca-pur-control-plane-data-accessor, the middleware + backend for the Anto system.")
+})
 
 /*
  * format of query is ?counties=["count1_id","count2_id", "count3_id",...] where countyX_id is the id for a CA county
  * responds with ["county1_count", "county2_count", "county3_count", ...] where countyX_count is the number of used pesticides for a county
  */
-router.get('/query-pur-db', function(req, res, next) {
+router.get('/query-pur-db', cors(),function(req, res, next) {
 
     // part of route
     var counties = req.query.counties
