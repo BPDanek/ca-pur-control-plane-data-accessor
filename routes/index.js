@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/test', cors(), function(req, res) {
-    res.send("Welcome to ca-pur-control-plane-data-accessor, the middleware + backend for the Anto system.")
+    res.status(200).send("Welcome to ca-pur-control-plane-data-accessor, the middleware + backend for the Anto system.")
 })
 
 /*
