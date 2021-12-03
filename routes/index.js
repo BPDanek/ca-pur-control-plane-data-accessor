@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Anto' });
 });
 
-router.get('/test', function(req, res) {
+router.get('/test', cors(), function(req, res) {
     res.send("Welcome to ca-pur-control-plane-data-accessor, the middleware + backend for the Anto system.")
 })
 
