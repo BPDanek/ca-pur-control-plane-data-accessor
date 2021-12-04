@@ -18,7 +18,7 @@ router.get('/test', cors(), function(req, res) {
  * format of query is ?counties=["count1_id","count2_id", "count3_id",...] where countyX_id is the id for a CA county
  * responds with ["county1_count", "county2_count", "county3_count", ...] where countyX_count is the number of used pesticides for a county
  */
-router.get('/query-pur-db', cors(),function(req, res, next) {
+router.get('/query-pur-db', cors(), function(req, res, next) {
 
     // part of route
     var counties = req.query.counties
