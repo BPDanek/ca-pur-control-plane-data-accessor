@@ -40,6 +40,8 @@ router.get('/query-pur-db', cors(), function(req, res, next) {
         // build query for rout parameters
         const query = `SELECT COUNT(*) FROM ca_udc WHERE county_cd = '${counties[row_index]}';`
 
+        console.log("query: ", query)
+
         // unpack count and push to an array of async requests/Promises
         pesticide_count_promises.push(
             db.one(query)
