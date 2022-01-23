@@ -7,18 +7,18 @@ function getPesticideCounts(pesticide_count_promises, counties) {
     for (let row_index = 0; row_index < counties.length; row_index++) {
 
         // build query for route parameters
-        const query = `SELECT pesticide_count FROM ca_reduced_udc WHERE county_cd = '${counties[row_index]}';`
+        const query = `SELECT pesticide_count FROM pur_archive_precursor.public.ca_reduced_udc WHERE county_cd = '${counties[row_index]}';`
 
         console.log("non-yearly query: ", query)
 
         // unpack count and push to an array of async requests/Promises
         pesticide_count_promises.push(
-            db.oneOrNone(query)
+            db.any(query)
                 .then((queryResponse) => {
-                    console.log(query, queryResponse.pesticide_count)
+                    console.log(query, queryResponse)
                     return queryResponse.pesticide_count })
-                .catch(() => {
-                    console.log("failure on", query)
+                .catch((error) => {
+                    console.log("failure on", query, error)
                     return 0
                 })
         )
@@ -30,7 +30,7 @@ function getYearlyPesticideCounts(pesticide_count_promises, counties) {
     for (let row_index = 0; row_index < counties.length; row_index++) {
 
         // build query for route parameters
-        const query = `SELECT count_2012, count_2013, count_2014, count_2015, count_2016, count_2017, count_2018 FROM ca_yearly_reduced_udc WHERE county_cd = '${counties[row_index]}';`
+        const query = `SELECT count_2012, count_2013, count_2014, count_2015, count_2016, count_2017, count_2018 FROM pur_archive_precursor.public.ca_yearly_reduced_udc WHERE county_cd = '${counties[row_index]}';`
 
         console.log("yearly query: ", query)
 
