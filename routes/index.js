@@ -20,7 +20,8 @@ router.get('/test', cors(), function(req, res) {
     console.log(db)
 
     // I've been having some db connection issues--this is a sanity check
-    db.any('SELECT * FROM pur_archive_precursor.public.ca_reduced_udc WHERE id=1;')
+    // db.any('SELECT * FROM pur_archive_precursor.public.ca_reduced_udc WHERE id=1;')
+    db.any('SELECT * FROM postgres.public.ca_reduced_udc WHERE id=1;')
         .then((data) => console.log("response", data))
         .catch((error) => console.log("error", error))
 

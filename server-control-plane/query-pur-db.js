@@ -7,7 +7,7 @@ function getPesticideCounts(pesticide_count_promises, counties) {
     for (let row_index = 0; row_index < counties.length; row_index++) {
 
         // build query for route parameters
-        const query = `SELECT pesticide_count FROM pur_archive_precursor.public.ca_reduced_udc WHERE county_cd = '${counties[row_index]}';`
+        const query = `SELECT pesticide_count FROM postgres.public.ca_reduced_udc WHERE county_cd = '${counties[row_index]}';`
 
         console.log("non-yearly query: ", query)
 
@@ -30,7 +30,7 @@ function getYearlyPesticideCounts(pesticide_count_promises, counties) {
     for (let row_index = 0; row_index < counties.length; row_index++) {
 
         // build query for route parameters
-        const query = `SELECT count_2012, count_2013, count_2014, count_2015, count_2016, count_2017, count_2018 FROM pur_archive_precursor.public.ca_yearly_reduced_udc WHERE county_cd = '${counties[row_index]}';`
+        const query = `SELECT count_2012, count_2013, count_2014, count_2015, count_2016, count_2017, count_2018 FROM postgres.public.ca_yearly_reduced_udc WHERE county_cd = '${counties[row_index]}';`
 
         console.log("yearly query: ", query)
 
