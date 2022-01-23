@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 const cors = require("cors");
+var db_config = require('../secrets');
+var pgp = require('pg-promise')(/* options */)
+var db = pgp(db_config)
 
 var queryPURTable = require('../server-control-plane/query-pur-db')
 
@@ -15,6 +18,11 @@ router.get('/test', cors(), function(req, res) {
     console.log(db_config)
     console.log(pgp)
     console.log(db)
+
+    // I've been having some db connection issues--this is a sanity check
+    db.any('SELECT * FROM pur_archive_precursor.public.ca_reduced_udc WHERE id=1;')
+        .then((data) => console.log("response", data))
+        .catch((error) => console.log("error", error))
 
     res.status(200).send("Welcome to ca-pur-control-plane-data-accessor, the middleware + backend for the Anto system.")
 })
